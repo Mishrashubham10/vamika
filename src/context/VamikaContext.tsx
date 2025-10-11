@@ -43,6 +43,8 @@ export interface Product {
   isNew?: boolean;
   isOnSale?: boolean;
   isBestSeller?: boolean;
+  features?: string[];
+  inStock: boolean;
 }
 
 export interface CartItem extends Product {
@@ -166,7 +168,7 @@ export const useVamika = () => {
 };
 
 // ========== Provider ==========
-export const BeautyProvider: React.FC<{ children: React.ReactNode }> = ({
+export const VamikaProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(vamikaReducer, initialState);
@@ -197,12 +199,12 @@ export const BeautyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     // ✅ Enrich categories & products with slugs
-    const enrichedCategories = categories.map((c: Category) => ({
+    const enrichedCategories = categories.map((c) => ({
       ...c,
       slug: slugify(c.name),
     }));
 
-    const enrichedProducts = products.map((p: Product) => ({
+    const enrichedProducts = products.map((p) => ({
       ...p,
       categorySlug: slugify(p.category),
     }));
@@ -217,7 +219,7 @@ export const BeautyProvider: React.FC<{ children: React.ReactNode }> = ({
       cart: state.cart,
       wishlist: state.wishlist,
     };
-    localStorage.setItem('beautyState', JSON.stringify(stateToSave));
+    localStorage.setItem('vamikaReducer', JSON.stringify(stateToSave));
   }, [state.user, state.cart, state.wishlist]);
 
   return (

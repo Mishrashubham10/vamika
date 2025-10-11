@@ -32,7 +32,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="py-24 px-4 bg-secondary/20 min-h-screen flex items-center">
+    <section className="py-24 px-4 bg-primary/20 min-h-screen flex items-center">
       <div className="container mx-auto max-w-4xl w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -40,8 +40,8 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Get In Touch</h2>
-          <p className="text-muted-foreground text-lg">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-primary-foreground">Get In Touch</h2>
+          <p className="text-muted text-lg">
             Let&apos;s discuss your next project
           </p>
         </motion.div>

@@ -1,4 +1,6 @@
-export const products = [
+import { Product } from "@/context/VamikaContext";
+
+export const products: Product[] = [
   // --- MAKEUP ---
   {
     id: '1',
@@ -17,6 +19,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'make-up',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '2',
@@ -34,6 +42,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'make-up',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '3',
@@ -51,6 +65,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'make-up',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '4',
@@ -68,6 +88,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'make-up',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '5',
@@ -85,6 +111,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'make-up',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '6',
@@ -102,6 +134,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'make-up',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '7',
@@ -120,6 +158,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'tools',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '8',
@@ -137,6 +181,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'make-up',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
 
   // --- SKINCARE ---
@@ -156,6 +206,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'skin-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '10',
@@ -173,6 +229,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'skin-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '11',
@@ -190,6 +252,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'skin-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '12',
@@ -208,6 +276,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'skin-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '13',
@@ -225,6 +299,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'skin-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '14',
@@ -242,6 +322,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'skin-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '15',
@@ -259,6 +345,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'skin-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '16',
@@ -276,6 +368,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'skin-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
 
   // --- FRAGRANCE ---
@@ -295,6 +393,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'fragrance',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '18',
@@ -312,6 +416,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'fragrance',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '19',
@@ -329,6 +439,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'fragrance',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '20',
@@ -346,6 +462,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'fragrance',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
 
   // --- NAILS ---
@@ -365,6 +487,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'nails',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '22',
@@ -382,6 +510,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'nails',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '23',
@@ -399,6 +533,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'nails',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '24',
@@ -417,6 +557,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'nails',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '25',
@@ -434,6 +580,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'nails',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
 
   // --- TOOLS & ACCESSORIES ---
@@ -453,6 +605,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: true,
     categorySlug: 'tools',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '27',
@@ -470,6 +628,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'tools',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '28',
@@ -487,6 +651,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'tools',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '29',
@@ -504,6 +674,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'tools',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '30',
@@ -522,6 +698,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'tools',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '31',
@@ -539,6 +721,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'tools',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '32',
@@ -556,6 +744,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'tools',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
 
   // --- EXTRA CARE ---
@@ -576,6 +770,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'hair-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '34',
@@ -593,6 +793,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'lip-care',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
   {
     id: '35',
@@ -610,6 +816,12 @@ export const products = [
     isOnSale: true,
     isBestSeller: false,
     categorySlug: 'face-masks',
+    features: [
+      'Active Noise Cancellation',
+      '30-hour battery',
+      'Premium sound quality',
+      'Comfortable design',
+    ],
   },
 ];
 

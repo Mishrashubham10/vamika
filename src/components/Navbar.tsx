@@ -1,219 +1,103 @@
-'use client';
+"use client";
 
+import { usePathname } from 'next/navigation';
+import { ShoppingCart, Menu, X } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Search, ShoppingBag, Heart, User, Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
 import Link from 'next/link';
-import { notFound, usePathname } from 'next/navigation';
-import Image from 'next/image';
-import { toast } from 'sonner';
-import { useVamika } from '@/context/VamikaContext';
 
 const Navbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { state, dispatch } = useVamika();
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const [query, setQuery] = useState('');
 
-  const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Categories', href: '/categories' },
-    { name: 'Products', href: '/products' },
-    { name: 'New Arrivals', href: '/new-arrivals' },
-    { name: 'Deals', href: '/deals' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   const isActive = (path: string) => pathname === path;
 
-  const cartItemsCount = state.cart.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
-
-  const handleLogout = () => {
-    dispatch({ type: 'LOGOUT' }),
-      toast.success("You've been logged out successfully!");
-  };
-
-  // FOR GLOBAL SEARCH
-  const filteredProducts = state.products.filter((p) => {
-    return p.name.toLowerCase().includes(query.toLowerCase());
-  });
-
   return (
-    <header
-      className="bg-gradient-to-r from-[var(--nav-start)]/95 to-[var(--nav-end)]/95 backdrop-blur-sm sticky top-0 z-50 shadow-md"
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border"
     >
-      <div className="container mx-auto px-4">
-        {/* =========== TOP BAR ========== */}
-        <div className="flex items-center justify-between py-4">
-          {/* ========== LOGO =========== */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="relative w-12 h-12 rounded-full flex items-center justify-center bg-white/10 border border-white/30">
-              <Image
-                src="/vamika.webp"
-                alt="Logo"
-                fill
-                className="object-cover p-1 rounded-full"
-              />
-            </div>
-            <span className="text-2xl font-bold text-white">
-              Vamika
-            </span>
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="text-2xl font-bold gradient-text">
+            VAMIKA
           </Link>
 
-          {/* ============ DESKTOP NAVIGATION ============= */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            {navigation.map((item) => (
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
               <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  'text-sm font-medium transition hover:text-primary-foreground text-muted',
-                  isActive(item.href)
-                    ? 'text-accent font-semibold'
-                    : 'opacity-90'
-                )}
+                key={link.path}
+                href={link.path}
+                className={`transition-colors ${
+                  isActive(link.path)
+                    ? 'text-accent font-medium'
+                    : 'text-primary-foreground hover:text-primary'
+                }`}
               >
-                {item.name}
+                {link.name}
               </Link>
             ))}
-          </nav>
-
-          {/* ========== SEARCH & ACTIONS ========== */}
-          <div className="flex items-center space-x-4">
-            {/* ========= SEARCH BAR ========== */}
-            <div className="hidden md:flex items-center relative">
-              <Search className="w-4 h-4 absolute left-3 text-white/70" />
-              <Input
-                placeholder="Search products..."
-                className="pl-10 w-64 bg-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/70 border-primary-foreground/30 focus:border-primary"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-
-            {/* ============ ACTIONS BUTTONS ============== */}
-            <div className="flex items-center space-x-2">
-              {/* <Button
-                variant="ghost"
-                size="icon"
-                className="relative text-white hover:bg-white/10"
-              >
-                <Heart className="w-5 h-5" />
-                {state.wishlist.length > 0 && (
-                  <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-gradient-to-r from-[#e94057] to-[#f27121] text-white text-xs">
-                    {state.wishlist.length}
-                  </Badge>
-                )}
-              </Button>z */}
-
-              <Link href="/cart">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative text-primary-foreground hover:bg-primary-foreground/10"
-                >
-                  <ShoppingBag className="w-5 h-5" />
-                  {cartItemsCount > 0 && (
-                    <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-gradient-to-r from-[var(--nav-start)] to-[var(--nav-end)] text-primary-foreground text-xs">
-                      {cartItemsCount}
-                    </Badge>
-                  )}
-                </Button>
-              </Link>
-
-              {state.isAuthenticated ? (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-white hover:bg-white/10"
-                  onClick={handleLogout}
-                >
-                  <User className="size-4" />
-                </Button>
-              ) : (
-                <Link href="/login">
-                  <Button className="bg-[var(--nav-start)] text-primary-foreground hover:bg-[var(--nav-start)]/65 px-4 py-2">
-                    Sign In
-                  </Button>
-                </Link>
-              )}
-
-              {/* ============ MOBILE MENU ============ */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden text-white"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                {isMobileMenuOpen ? (
-                  <X className="w-5 h-5" />
-                ) : (
-                  <Menu className="w-5 h-5" />
-                )}
+            <Link href="/cart">
+              <Button variant="outline" size="icon" className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center">
+                  0
+                </span>
               </Button>
-            </div>
+            </Link>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-foreground"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
 
-        {/* ============ MOBILE NAV ============ */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-white/20 py-4 bg-gradient-to-r from-[var(--nav-start)]/95 to-[var(--nav-end)]/95">
-            <nav className="flex flex-col space-y-4">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'text-sm font-medium px-4 py-2 rounded-lg text-white transition',
-                    isActive(item.href)
-                      ? 'bg-white/20 text-primary-foreground font-semibold'
-                      : 'hover:bg-white/10'
-                  )}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-
-              {/* ============ MOBILE SEARCH ============ */}
-              <div className="px-4">
-                <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70" />
-                  <Input
-                    placeholder="Search products..."
-                    className="pl-10 bg-white/10 border-white/30 text-white placeholder:text-white/70"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                  />
-                </div>
-              </div>
-            </nav>
-          </div>
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden mt-4 pb-4"
+          >
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={`block py-2 transition-colors ${
+                  isActive(link.path)
+                    ? 'text-primary font-medium'
+                    : 'text-foreground hover:text-primary'
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <Link href="/cart" onClick={() => setIsOpen(false)}>
+              <Button variant="outline" className="w-full mt-2">
+                <ShoppingCart className="h-5 w-5 mr-2" />
+                Cart (0)
+              </Button>
+            </Link>
+          </motion.div>
         )}
       </div>
-
-      {/* ============ SEARCH RESULTS ============= */}
-      {query &&
-        (filteredProducts.length > 0
-          ? filteredProducts.map((p) => (
-              <Link
-                key={p.id}
-                href={`/product/${p.id}`} // adjust route
-                className="block px-4 py-2 hover:bg-gray-100"
-                onClick={() => setQuery('')}
-              >
-                {p.name}
-              </Link>
-            ))
-          : notFound())}
-    </header>
+    </motion.nav>
   );
 };
 
