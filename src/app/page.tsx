@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, Shield, Truck, Sparkles } from 'lucide-react';
+import { ArrowRight, Star, Shield, Truck, Sparkles, Gift, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import ProductCard from '@/components/ProductCard';
@@ -213,7 +213,7 @@ const Home = () => {
         </section>
       )}
 
-      {/* Featured Products */}
+      {/* ============== FEATURED PRODUCTS ============== */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <motion.div
@@ -263,14 +263,103 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* ============== BEST SELLERS ============== */}
+      {bestSeller.length > 0 && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Star className="w-6 h-6 text-muted" />
+                  <Badge className="gradient-luxury text-primary-foreground">
+                    Trending
+                  </Badge>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-2">
+                  Best Sellers
+                </h2>
+                <p className="text-muted">
+                  Our most loved products that customers cannot get enough of.
+                </p>
+              </div>
+
+              <Link href="/best-sellers">
+                <Button
+                  variant="outline"
+                  className="hover:bg-muted hover:text-luxury-foreground"
+                >
+                  View All
+                  <TrendingUp className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {bestSeller.slice(0, 4).map((product) => (
+                <Link href={`/products/${product.id}`} key={product.id}>
+                  <ProductCard
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                    onAddToWishlist={handleAddToWishlist}
+                    className="animate-fade-in"
+                  />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ============= DEALS ============= */}
+      {deals.length > 0 && (
+        <section className="py-16 gradient-hero">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Gift className="w-6 h-6 text-destructive" />
+                  <Badge variant="destructive">Limited Time Offer</Badge>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-playfair font-bold text-primary-foreground mb-2">
+                  Special Deals
+                </h2>
+                <p className="text-muted">
+                  Do not miss these amazing offers — limited time only!
+                </p>
+              </div>
+
+              <Link href="/deals">
+                <Button className="bg-destructive text-muted hover:bg-destructive/90">
+                  Shop Deals
+                  <Gift className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {deals.slice(0, 4).map((product) => (
+                <Link href={`/products/${product.id}`} key={product.id}>
+                  <ProductCard
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                    onAddToWishlist={handleAddToWishlist}
+                    className="animate-fade-in"
+                  />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ============== CTA SECTION ============== */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="glass-card rounded-2xl p-12 text-center animate-glow"
+            className="bg-gray-800 rounded-2xl p-12 text-center animate-glow"
           >
             <h2 className="text-4xl font-bold mb-4 text-primary-foreground">
               Ready to Elevate Your Style?
