@@ -1,139 +1,228 @@
-"use client";
+'use client';
 
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingCart, ArrowLeft, Check } from 'lucide-react';
+import { Heart, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { products } from '@/data/products';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { useParams } from 'next/navigation';
-import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
+// import { RatingStars } from '@/components/RatingStars';
+// import { QuantitySelector } from '@/components/QuantitySelector';
+import { useVamika } from '@/context/VamikaContext';
+import { QuantitySelector } from '@/components/QuantitySelector';
 
-export default function ProductDetail() {
+export default function SingleProduct() {
   const { productId } = useParams<{ productId: string }>();
-  const product = products.find((p) => p.id === productId);
+  const router = useRouter();
+  const { state, dispatch } = useVamika();
+  const [quantity, setQuantity] = useState(1);
 
-  console.log('Product id is here', productId);
-  console.log('productId from useParams:', productId);
-  console.log(
-    'all product ids:',
-    products.map((p) => p.id)
+  // Find product by slug
+  const product = state.products.find((p) => p.id === productId);
+
+  const isWishlisted = useMemo(
+    () => product && state.wishlist.some((w) => w.id === product.id),
+    [state.wishlist, product]
   );
 
   if (!product) {
     return (
-      <div className="min-h-screen pt-24 pb-12">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">Product Not Found</h1>
-          <Link href="/products">
-            <Button>Back to Products</Button>
-          </Link>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">
+            Product Not Found
+          </h1>
+          <Button onClick={() => router.push('/products')}>
+            Back to Products
+          </Button>
         </div>
       </div>
     );
   }
 
+  const discountPercentage = product.originalPrice
+    ? Math.round(
+        ((product.originalPrice - product.price) / product.originalPrice) * 100
+      )
+    : 0;
+
   const handleAddToCart = () => {
-    toast.success('Added to cart!', {
-      description: `${product.name} has been added to your cart.`,
-    });
+    for (let i = 0; i < quantity; i++) {
+      dispatch({ type: 'ADD_TO_CART', payload: product });
+    }
+    toast.success(`${quantity} ${product.name} added to cart`);
+    router.push('/cart');
+  };
+
+  const handleWishlistToggle = () => {
+    if (isWishlisted) {
+      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: product.id });
+      toast.success('Removed from wishlist');
+    } else {
+      dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
+      toast.success('Added to wishlist');
+    }
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-background pt-16 mt-6 glass-card">
+      <div className="container mx-auto px-4 py-8">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <Link href="/products">
-            <Button variant="ghost">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Products
-            </Button>
-          </Link>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="glass-card rounded-2xl overflow-hidden"
-          >
-            <Image
-              src={product.image}
-              alt={product.name}
-              className="w-full aspect-square object-cover"
-              height={500}
-              width={500}
-            />
-          </motion.div>
-
-          {/* Product Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <div className="inline-block bg-accent/20 text-accent px-4 py-2 rounded-full text-sm font-medium mb-4">
-              {product.category}
-            </div>
-
-            <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-
-            <p className="text-5xl font-bold gradient-text mb-6">
-              ${product.price}
-            </p>
-
-            <p className="text-muted-foreground text-lg mb-8">
-              {product.description}
-            </p>
-
-            {/* Features */}
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">Key Features</h3>
-              <ul className="space-y-3">
-                {product?.features?.map((feature, index) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                    className="flex items-center gap-3"
-                  >
-                    <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Check className="h-4 w-4 text-primary" />
-                    </div>
-                    <span className="text-foreground">{feature}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Stock Info */}
-            <div className="mb-8 glass-card p-4 rounded-lg">
-              <p className="text-muted-foreground">
-                <span className="text-primary font-semibold">
-                  {product.inStock}
-                </span>{' '}
-                units in stock
-              </p>
-            </div>
-
-            {/* Add to Cart Button */}
-            <Button
-              size="lg"
-              className="w-full bg-primary hover:bg-primary/90 text-lg"
-              onClick={handleAddToCart}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* =============== PRODUCT IMG =============== */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-4"
             >
-              <ShoppingCart className="mr-2 h-5 w-5" />
-              Add to Cart
-            </Button>
-          </motion.div>
-        </div>
+              <div className="relative w-full h-full aspect-square overflow-hidden rounded-lg beauty-card">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </motion.div>
+
+            {/* =============== PRODUCT INFO =============== */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="space-y-6"
+            >
+              {/* =============== BADGES =============== */}
+              <div className="flex flex-wrap gap-2">
+                {product.isNew && (
+                  <Badge className="bg-accent text-accent-foreground">
+                    New
+                  </Badge>
+                )}
+                {product.isOnSale && discountPercentage > 0 && (
+                  <Badge className="bg-destructive text-destructive-foreground">
+                    -{discountPercentage}% OFF
+                  </Badge>
+                )}
+                {product.isBestSeller && <Badge>Best Seller</Badge>}
+              </div>
+
+              <p className="text-sm text-primary font-medium uppercase tracking-wide">
+                {product.brand}
+              </p>
+              <h1 className="text-3xl font-playfair font-bold text-primary-foreground">
+                {product.name}
+              </h1>
+
+              {/* =============== RATING =============== */}
+              <div className="flex items-center space-x-4">
+                {/* <RatingStars rating={product.rating} /> */}
+                <span className="text-sm text-muted">
+                  {product.rating} ({product.reviews} reviews)
+                </span>
+              </div>
+
+              {/* =============== PRICE =============== */}
+              <div className="flex items-center space-x-3">
+                <span className="text-3xl font-bold text-muted">
+                  ₹{product.price.toFixed(2)}
+                </span>
+                {product.originalPrice && (
+                  <span className="text-lg text-muted line-through">
+                    ₹{product.originalPrice.toFixed(2)}
+                  </span>
+                )}
+              </div>
+
+              <Separator />
+
+              {/* =============== DESCRIPTION ============== */}
+              <div>
+                <h3 className="text-lg font-semibold text-primary-foreground mb-2">
+                  Description
+                </h3>
+                <p className="text-muted leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
+
+              {/* ============ QUANTITY AND ACTIONS =============== */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm font-medium text-muted">
+                    Quantity:
+                  </span>
+                  <QuantitySelector
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                  />
+                </div>
+
+                <div className="flex space-x-4">
+                  <Button
+                    className="flex-1 text-primary-foreground shadow-luxury border-1 border-gray-700 hover:border-0"
+                    onClick={handleAddToCart}
+                  >
+                    <ShoppingBag className="w-4 h-4 mr-2" />
+                    Add to Cart
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="w-12 h-12 bg-gray-800 text-muted hover:bg-gray-800"
+                    onClick={handleWishlistToggle}
+                  >
+                    <Heart
+                      className={`w-5 h-5 ${
+                        isWishlisted ? 'fill-current text-destructive' : ''
+                      }`}
+                    />
+                  </Button>
+                </div>
+              </div>
+
+              {/* ============== PRODUCT DETAILS ============= */}
+              <Card className='bg-gray-800'>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold text-primary-foreground mb-4">
+                    Product Details
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted">Category:</span>
+                      <span className="text-muted capitalize">
+                        {product.category}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted">Brand:</span>
+                      <span className="text-muted">{product.brand}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted">Rating:</span>
+                      <span className="text-muted">
+                        {product.rating}/5
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted">Reviews:</span>
+                      <span className="text-muted">{product.reviews}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

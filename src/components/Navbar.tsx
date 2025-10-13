@@ -1,15 +1,19 @@
-"use client";
+'use client';
 
 import { usePathname } from 'next/navigation';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Button } from './ui/button';
 import Link from 'next/link';
+import { useVamika } from '@/context/VamikaContext';
+import { Badge } from './ui/badge';
+import { toast } from 'sonner';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { state, dispatch } = useVamika();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -19,6 +23,16 @@ const Navbar = () => {
   ];
 
   const isActive = (path: string) => pathname === path;
+
+  const cartItemsCount = state.cart.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' }),
+      toast.success("You've been logged out successfully!");
+  };
 
   return (
     <motion.nav
@@ -48,11 +62,17 @@ const Navbar = () => {
               </Link>
             ))}
             <Link href="/cart">
-              <Button variant="outline" size="icon" className="relative">
-                <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                  0
-                </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative text-white hover:bg-white/10"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {cartItemsCount > 0 && (
+                  <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center glass-card text-white text-xs">
+                    {cartItemsCount}
+                  </Badge>
+                )}
               </Button>
             </Link>
           </div>
@@ -88,10 +108,18 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link href="/cart" onClick={() => setIsOpen(false)}>
-              <Button variant="outline" className="w-full mt-2">
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                Cart (0)
+            <Link href="/cart">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative text-white hover:bg-white/10"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {cartItemsCount > 0 && (
+                  <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-gradient-to-r from-[#e94057] to-[#f27121] text-white text-xs">
+                    {cartItemsCount}
+                  </Badge>
+                )}
               </Button>
             </Link>
           </motion.div>

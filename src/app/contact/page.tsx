@@ -1,163 +1,203 @@
 'use client';
 
+import { motion } from 'framer-motion';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Mail, MapPin, Phone } from 'lucide-react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 
 const Contact = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success('Message sent!', {
+      description: "We'll get back to you as soon as possible.",
+    });
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-      },
+  const contactInfo = [
+    {
+      icon: Mail,
+      title: 'Email',
+      content: 'support@vamika.com',
+      link: 'mailto:support@vamika.com',
     },
-  };
+    {
+      icon: Phone,
+      title: 'Phone',
+      content: '+1 (555) 123-4567',
+      link: 'tel:+15551234567',
+    },
+    {
+      icon: MapPin,
+      title: 'Address',
+      content: '123 Commerce Street, New York, NY 10001',
+      link: '#',
+    },
+  ];
 
   return (
-    <section className="py-24 px-4 bg-primary/20 min-h-screen flex items-center">
-      <div className="container mx-auto max-w-4xl w-full">
+    <div className="min-h-screen pt-24 pb-12">
+      <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-primary-foreground">Get In Touch</h2>
-          <p className="text-muted text-lg">
-            Let&apos;s discuss your next project
+          <h1 className="text-5xl font-bold mb-6 text-primary-foreground">
+            Get In <span className="gradient-text">Touch</span>
+          </h1>
+          <p className="text-muted text-lg max-w-2xl mx-auto">
+            Have a question or feedback? We&apos;d love to hear from you
           </p>
         </motion.div>
 
-        <motion.div
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-2 gap-8"
-        >
-          <motion.div variants={itemVariants}>
-            <Card className="p-8 space-y-6 h-full">
-              <h3 className="text-2xl font-semibold mb-6">
-                Contact Information
-              </h3>
-
-              <div className="space-y-4">
-                <motion.div
-                  whileHover={{ x: 5 }}
-                  className="flex items-start gap-4"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass-card rounded-2xl p-8 border border-transparent hover:border-dashed hover:border-[1px] hover:border-primary/40"
+          >
+            <h2 className="text-2xl font-bold mb-6 text-primary-foreground">
+              Send us a Message
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium mb-2 text-muted"
                 >
-                  <div className="p-3 rounded-lg bg-primary/20">
-                    <Mail className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <a
-                      href="mailto:shubhdev101@gmail.com"
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      shubhdev101@gmaili.com
-                    </a>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  whileHover={{ x: 5 }}
-                  className="flex items-start gap-4"
-                >
-                  <div className="p-3 rounded-lg bg-primary/20">
-                    <Phone className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <a
-                      href="tel:+1234567890"
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      +91 7400203430
-                    </a>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  whileHover={{ x: 5 }}
-                  className="flex items-start gap-4"
-                >
-                  <div className="p-3 rounded-lg bg-primary/20">
-                    <MapPin className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Location</p>
-                    <p className="text-muted-foreground">India</p>
-                  </div>
-                </motion.div>
+                  Name
+                </label>
+                <Input
+                  id="name"
+                  placeholder="Your name"
+                  required
+                  className="text-muted placeholder:text-muted"
+                />
               </div>
-            </Card>
-          </motion.div>
 
-          <motion.div variants={itemVariants}>
-            <Card className="p-8 h-full">
-              <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
-
-              <form className="space-y-4">
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:outline-none transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <input
-                    type="email"
-                    placeholder="Your Email"
-                    className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:outline-none transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <textarea
-                    placeholder="Your Message"
-                    rows={4}
-                    className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:outline-none transition-colors resize-none"
-                  />
-                </div>
-
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium mb-2 text-muted"
                 >
-                  <Button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
-                  >
-                    Send Message
-                  </Button>
-                </motion.div>
-              </form>
-            </Card>
+                  Email
+                </label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  required
+                  className="text-muted placeholder:text-muted"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="subject"
+                  className="block text-sm font-medium mb-2 text-muted"
+                >
+                  Subject
+                </label>
+                <Input
+                  id="subject"
+                  placeholder="How can we help?"
+                  required
+                  className="text-muted placeholder:text-muted"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium mb-2 text-muted"
+                >
+                  Message
+                </label>
+                <Textarea
+                  id="message"
+                  placeholder="Tell us more..."
+                  required
+                  className="min-h-[150px] text-muted placeholder:text-muted"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full bg-primary hover:bg-primary/90"
+              >
+                <Send className="mr-2 h-4 w-4" />
+                Send Message
+              </Button>
+            </form>
           </motion.div>
-        </motion.div>
+
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="space-y-6"
+          >
+            <div className="glass-card rounded-2xl p-8 border border-transparent hover:border-dashed hover:border-[1px] hover:border-primary/40">
+              <h2 className="text-2xl font-bold mb-6 text-primary-foreground">
+                Contact Information
+              </h2>
+              <div className="space-y-6">
+                {contactInfo.map((info, index) => (
+                  <motion.a
+                    key={info.title}
+                    href={info.link}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                    className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <info.icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1 text-primary-foreground">
+                        {info.title}
+                      </h3>
+                      <p className="text-muted">{info.content}</p>
+                    </div>
+                  </motion.a>
+                ))}
+              </div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="glass-card rounded-2xl p-8 shadow-md hover:shadow-2xl border border-transparent hover:border-dashed hover:border-[1px] hover:border-primary/40"
+            >
+              <h3 className="text-xl font-bold mb-4 text-primary-foreground">
+                Business Hours
+              </h3>
+              <div className="space-y-2 text-muted-foreground">
+                <p className="flex justify-between">
+                  <span className="text-muted">Monday - Friday</span>
+                  <span className="text-muted">9:00 AM - 6:00 PM</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="text-muted">Saturday</span>
+                  <span className="text-muted">10:00 AM - 4:00 PM</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="text-muted">Sunday</span>
+                  <span className="text-muted">Closed</span>
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

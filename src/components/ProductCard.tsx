@@ -1,53 +1,177 @@
-"use client";
+'use client';
 
-import { motion } from 'framer-motion';
-import { ShoppingCart } from 'lucide-react';
+import { Eye, Heart, ShoppingBag, Star } from 'lucide-react';
 import { Button } from './ui/button';
-import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/context/VamikaContext';
+import { useState } from 'react';
+import { Card, CardContent } from './ui/card';
+import { cn } from '@/lib/utils';
+import { Badge } from './ui/badge';
+
+interface ProductCardProps {
+  product: Product;
+  onAddToCart?: (product: Product) => void;
+  onAddToWishlist?: (product: Product) => void;
+  onQuickView?: (product: Product) => void;
+  className?: string;
+}
 
 const ProductCard = ({
-  id,
-  name,
-  price,
-  image,
-  category,
-}: Product) => {
-  return (
-    <motion.div
-      whileHover={{ y: -5 }}
-      className="glass-card rounded-lg overflow-hidden group"
-    >
-      <Link href={`/products/${id}`}>
-        <div className="relative overflow-hidden aspect-square">
-          <Image
-            src={image}
-            alt={name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-            fill
-          />
-          <div className="absolute top-2 right-2 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-medium">
-            {category}
-          </div>
-        </div>
-      </Link>
+  product,
+  onAddToCart,
+  onAddToWishlist,
+  onQuickView,
+  className,
+}: ProductCardProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
-      <div className="p-4">
-        <Link href={`/product/${id}`}>
-          <h3 className="font-semibold text-lg mb-2 text-muted group-hover:text-primary transition-colors">
-            {name}
-          </h3>
-        </Link>
-        <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold gradient-text">₹ {price}</span>
-          <Button size="sm" className="bg-primary hover:bg-primary/90">
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            Add
+  const handleWishlistToggle = () => {
+    setIsWishlisted(!isWishlisted);
+    onAddToWishlist?.(product);
+  };
+
+  const discountPercentage = product.originalPrice
+    ? Math.round(
+        ((product.originalPrice - product.price) / product.originalPrice) * 100
+      )
+    : 0;
+
+  return (
+    <Card
+      className={cn(
+        'overflow-hidden cursor-pointer m-0 p-0 transition-smooth hover:shadow-xl bg-gray-800',
+        className
+      )}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* ================= IMG WRAPPER ================= */}
+      <div className="relative w-full aspect-square bg-muted overflow-hidden">
+        <Image
+          src={product.image}
+          alt={product.name}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+
+        {/* ================= BADGES ================= */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {product.isNew && (
+            <Badge className="bg-accent/90 text-accent-foreground backdrop-blur-sm shadow-md">
+              New
+            </Badge>
+          )}
+          {product.isOnSale && discountPercentage > 0 && (
+            <Badge className="bg-destructive/90 text-destructive-foreground backdrop-blur-sm shadow-md">
+              -{discountPercentage}%
+            </Badge>
+          )}
+          {product.isBestSeller && (
+            <Badge className="shadow-md">Best Seller</Badge>
+          )}
+        </div>
+
+        <div
+          className={cn(
+            'absolute top-3 right-3 flex flex-col gap-2 transition-all',
+            isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2'
+          )}
+        >
+          <Button
+            variant="outline"
+            size="icon"
+            className="w-9 h-9 bg-background/80 backdrop-blur-sm border-border/50 hover:bg-primary hover:text-primary-foreground"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleWishlistToggle();
+            }}
+          >
+            <Heart
+              className={cn(
+                'w-4 h-4',
+                isWishlisted ? 'fill-current text-destructive' : ''
+              )}
+            />
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon"
+            className="w-9 h-9 bg-background/80 backdrop-blur-sm border-border/50 hover:bg-primary hover:text-primary-foreground"
+            onClick={(e) => {
+              e.stopPropagation();
+              onQuickView?.(product);
+            }}
+          >
+            <Eye className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* ================= ADD TO CART ================= */}
+        <div
+          className={cn(
+            'absolute bottom-3 left-3 right-3 transition-all',
+            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+          )}
+        >
+          <Button
+            className="w-full text-primary-foreground shadow-md"
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart?.(product);
+            }}
+          >
+            <ShoppingBag className="w-4 h-4 mr-2" />
+            Add to Cart
           </Button>
         </div>
       </div>
-    </motion.div>
+
+      {/* ================= CONTENT ================= */}
+      <CardContent className="p-4 space-y-2">
+        <p className="text-sm text-muted font-medium">
+          {product.brand}
+        </p>
+
+        <h3 className="font-semibold text-primary-foreground line-clamp-2 group-hover:text-primary transition-smooth">
+          {product.name}
+        </h3>
+
+        {/* ================= RATING ================= */}
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={cn(
+                  'w-3 h-3',
+                  i < Math.floor(product.rating)
+                    ? 'fill-primary text-primary'
+                    : 'text-muted-foreground/40'
+                )}
+              />
+            ))}
+          </div>
+          <span className="text-xs text-muted">
+            {product.rating} ({product.reviews})
+          </span>
+        </div>
+
+        {/* ================= PRICE ================= */}
+        <div className="flex items-center space-x-2">
+          <span className="text-lg font-bold text-muted">
+            ₹{product.price.toFixed(2)}
+          </span>
+          {product.originalPrice && (
+            <span className="text-sm text-muted line-through">
+              ₹{product.originalPrice.toFixed(2)}
+            </span>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

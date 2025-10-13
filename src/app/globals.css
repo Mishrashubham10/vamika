@@ -119,12 +119,15 @@
   --sidebar-ring: oklch(0.6 0.12 250);
 }
 
-.bg-gradient {
+.bg {
   background: linear-gradient(
     to right,
     hsl(var(--nav-start) / 0.95),
     hsl(var(--nav-end) / 0.95)
   );
+  &:hover {
+    background-color: var(--primary);
+  }
 }
 
 @layer base {
