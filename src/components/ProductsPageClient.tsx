@@ -2,7 +2,13 @@
 
 import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, SlidersHorizontal, Grid, List, Loader2Icon } from 'lucide-react';
+import {
+  Search,
+  SlidersHorizontal,
+  Grid,
+  List,
+  Loader2Icon,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -88,146 +94,141 @@ export default function ProductsPageClient() {
     dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
 
   return (
-    <Suspense fallback={<Loader2Icon className='size-24' />}>
-      <div className="min-h-screen mt-16">
-        {/* ================= HEADER ================= */}
-        <section className="py-12 border-b border-border">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-playfair font-bold text-primary-foreground mb-4">
-              All Products
-            </h1>
-            <p className="text-lg text-muted max-w-2xl mx-auto">
-              Discover our complete collection of premium beauty products.
-            </p>
+    <div className="min-h-screen mt-16">
+      {/* ================= HEADER ================= */}
+      <section className="py-12 border-b border-border">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-playfair font-bold text-primary-foreground mb-4">
+            All Products
+          </h1>
+          <p className="text-lg text-muted max-w-2xl mx-auto">
+            Discover our complete collection of premium beauty products.
+          </p>
 
-            <div className="flex flex-col lg:flex-row gap-4 items-center justify-center mt-8">
-              <div className="relative w-full lg:w-96">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted w-4 h-4" />
-                <Input
-                  placeholder="Search products, brands..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 placeholder:text-muted"
-                />
-              </div>
-
-              <Select
-                value={selectedCategorySlug}
-                onValueChange={setSelectedCategorySlug}
-              >
-                <SelectTrigger className="w-48 text-muted">
-                  <SelectValue placeholder="Category" className="text-muted" />
-                </SelectTrigger>
-                <SelectContent className='text-muted glass-card'>
-                  <SelectItem value="all" className='text-muted'>All Categories</SelectItem>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.slug} className='hover:bg-primary'>
-                      {cat.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48 text-muted">
-                  <SelectValue placeholder="Sort by" className='text-muted' />
-                </SelectTrigger>
-                <SelectContent className='glass-card text-muted'>
-                  <SelectItem value="name">Name A-Z</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="rating">Highest Rated</SelectItem>
-                  <SelectItem value="newest">Newest First</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <div className="flex border border-border rounded-lg">
-                <Button
-                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('grid')}
-                  className="rounded-r-none"
-                >
-                  <Grid className="w-4 h-4 text-muted" />
-                </Button>
-                <Button
-                  variant={viewMode === 'list' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewMode('list')}
-                  className="rounded-l-none"
-                >
-                  <List className="w-4 h-4 text-muted" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ================= PRODUCTS DETAIL =============== */}
-        <section className="py-12 container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8 flex-wrap gap-2">
-            <div className="flex items-center gap-4 flex-wrap">
-              <span className="text-muted">
-                {filteredAndSortedProducts.length} products found
-              </span>
-              {searchTerm && (
-                <Badge
-                  variant="outline"
-                  className="border-primary text-primary"
-                >
-                  {searchTerm}
-                </Badge>
-              )}
-              {selectedCategorySlug !== 'all' && (
-                <Badge
-                  variant="outline"
-                  className="border-primary text-primary"
-                >
-                  {
-                    categories.find((c) => c.slug === selectedCategorySlug)
-                      ?.name
-                  }
-                </Badge>
-              )}
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-center mt-8">
+            <div className="relative w-full lg:w-96">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted w-4 h-4" />
+              <Input
+                placeholder="Search products, brands..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 placeholder:text-muted"
+              />
             </div>
 
-            <Button variant="outline" size="sm" onClick={resetFilters}>
-              <SlidersHorizontal className="w-4 h-4 mr-2" /> Reset Filters
-            </Button>
-          </div>
-
-          {filteredAndSortedProducts.length > 0 ? (
-            <div
-              className={`grid gap-6 ${
-                viewMode === 'grid'
-                  ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                  : 'grid-cols-1 lg:grid-cols-2'
-              }`}
+            <Select
+              value={selectedCategorySlug}
+              onValueChange={setSelectedCategorySlug}
             >
-              {filteredAndSortedProducts.map((product) => (
-                <Link key={product.id} href={`/products/${product.id}`}>
-                  <ProductCard
-                    product={product}
-                    onAddToCart={handleAddToCart}
-                    onAddToWishlist={handleAddToWishlist}
-                    className="animate-fade-in"
-                  />
-                </Link>
-              ))}
+              <SelectTrigger className="w-48 text-muted">
+                <SelectValue placeholder="Category" className="text-muted" />
+              </SelectTrigger>
+              <SelectContent className="text-muted glass-card">
+                <SelectItem value="all" className="text-muted">
+                  All Categories
+                </SelectItem>
+                {categories.map((cat) => (
+                  <SelectItem
+                    key={cat.id}
+                    value={cat.slug}
+                    className="hover:bg-primary"
+                  >
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-48 text-muted">
+                <SelectValue placeholder="Sort by" className="text-muted" />
+              </SelectTrigger>
+              <SelectContent className="glass-card text-muted">
+                <SelectItem value="name">Name A-Z</SelectItem>
+                <SelectItem value="price-low">Price: Low to High</SelectItem>
+                <SelectItem value="price-high">Price: High to Low</SelectItem>
+                <SelectItem value="rating">Highest Rated</SelectItem>
+                <SelectItem value="newest">Newest First</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <div className="flex border border-border rounded-lg">
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+                className="rounded-r-none"
+              >
+                <Grid className="w-4 h-4 text-muted" />
+              </Button>
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+                className="rounded-l-none"
+              >
+                <List className="w-4 h-4 text-muted" />
+              </Button>
             </div>
-          ) : (
-            <div className="text-center py-16">
-              <h3 className="text-xl font-semibold text-primary-foreground mb-2">
-                No products found
-              </h3>
-              <p className="text-muted mb-6">
-                Try adjusting your search terms or filters.
-              </p>
-              <Button onClick={resetFilters}>Clear Search</Button>
-            </div>
-          )}
-        </section>
-      </div>
-    </Suspense>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= PRODUCTS DETAIL =============== */}
+      <section className="py-12 container mx-auto px-4">
+        <div className="flex items-center justify-between mb-8 flex-wrap gap-2">
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="text-muted">
+              {filteredAndSortedProducts.length} products found
+            </span>
+            {searchTerm && (
+              <Badge variant="outline" className="border-primary text-primary">
+                {searchTerm}
+              </Badge>
+            )}
+            {selectedCategorySlug !== 'all' && (
+              <Badge variant="outline" className="border-primary text-primary">
+                {categories.find((c) => c.slug === selectedCategorySlug)?.name}
+              </Badge>
+            )}
+          </div>
+
+          <Button variant="outline" size="sm" onClick={resetFilters}>
+            <SlidersHorizontal className="w-4 h-4 mr-2" /> Reset Filters
+          </Button>
+        </div>
+
+        {filteredAndSortedProducts.length > 0 ? (
+          <div
+            className={`grid gap-6 ${
+              viewMode === 'grid'
+                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                : 'grid-cols-1 lg:grid-cols-2'
+            }`}
+          >
+            {filteredAndSortedProducts.map((product) => (
+              <Link key={product.id} href={`/products/${product.id}`}>
+                <ProductCard
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                  onAddToWishlist={handleAddToWishlist}
+                  className="animate-fade-in"
+                />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <h3 className="text-xl font-semibold text-primary-foreground mb-2">
+              No products found
+            </h3>
+            <p className="text-muted mb-6">
+              Try adjusting your search terms or filters.
+            </p>
+            <Button onClick={resetFilters}>Clear Search</Button>
+          </div>
+        )}
+      </section>
+    </div>
   );
 }
