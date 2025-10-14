@@ -6,32 +6,62 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import z from 'zod/v3';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form';
+
+const contactSchema = z.object({
+  name: z.string().min(2, 'Name is required'),
+  email: z.string().email('Invalid email address').min(2, 'Email is required'),
+  subject: z.string().min(2, 'Subject is required'),
+  message: z.string().optional().or(z.literal('')),
+});
+
+type ContactSchema = z.infer<typeof contactSchema>;
 
 const Contact = () => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm<ContactSchema>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
+  });
+
+  // ============= ON SUBMIT ==============
+  function onSubmit() {
     toast.success('Message sent!', {
-      description: "We'll get back to you as soon as possible.",
+      description: `We'll get back to you as soon as possible.`,
     });
-  };
+  }
 
   const contactInfo = [
     {
       icon: Mail,
       title: 'Email',
-      content: 'support@vamika.com',
-      link: 'mailto:support@vamika.com',
+      content: 'vamikagarmentsecomerce8216@gmail.com',
+      link: 'vamikagarmentsecomerce8216@gmail.com',
     },
     {
       icon: Phone,
       title: 'Phone',
-      content: '+1 (555) 123-4567',
-      link: 'tel:+15551234567',
+      content: '+91 7666528330',
+      link: 'tel:+917666528330',
     },
     {
       icon: MapPin,
       title: 'Address',
-      content: '123 Commerce Street, New York, NY 10001',
+      content:
+        '104D, RIDDHISIDDHI COMPLEX, KAMRAJNAGAR UTTANGARRD2, GOREGAON WEST, MUMBAI 400104',
       link: '#',
     },
   ];
@@ -63,8 +93,12 @@ const Contact = () => {
             <h2 className="text-2xl font-bold mb-6 text-primary-foreground">
               Send us a Message
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                {/* <div>
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium mb-2 text-muted"
@@ -77,62 +111,96 @@ const Contact = () => {
                   required
                   className="text-muted placeholder:text-muted"
                 />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium mb-2 text-muted"
-                >
-                  Email
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  required
-                  className="text-muted placeholder:text-muted"
+              </div> */}
+                {/* ============= NAME ============ */}
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-primary-foreground">
+                        Name
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Jane Doe"
+                          className="text-muted placeholder:text-muted"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div>
-                <label
-                  htmlFor="subject"
-                  className="block text-sm font-medium mb-2 text-muted"
-                >
-                  Subject
-                </label>
-                <Input
-                  id="subject"
-                  placeholder="How can we help?"
-                  required
-                  className="text-muted placeholder:text-muted"
+                {/* =========== EMAIL ============= */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-primary-foreground">
+                        Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="jane@vamika.com"
+                          className="text-muted placeholder:text-muted"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium mb-2 text-muted"
-                >
-                  Message
-                </label>
-                <Textarea
-                  id="message"
-                  placeholder="Tell us more..."
-                  required
-                  className="min-h-[150px] text-muted placeholder:text-muted"
+                {/* =========== SUBJECT ============ */}
+                <FormField
+                  control={form.control}
+                  name="subject"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-primary-foreground">
+                        Subject
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="What's going on"
+                          className="text-muted placeholder:text-muted"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90"
-              >
-                <Send className="mr-2 h-4 w-4" />
-                Send Message
-              </Button>
-            </form>
+                {/* ========== MESSAGE ========== */}
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-primary-foreground">
+                        Message
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Message"
+                          className="text-muted placeholder:text-muted min-h-[150px]"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90"
+                >
+                  <Send className="mr-2 h-4 w-4" />
+                  Send Message
+                </Button>
+              </form>
+            </Form>
           </motion.div>
 
           {/* Contact Info */}
@@ -182,7 +250,7 @@ const Contact = () => {
               <div className="space-y-2 text-muted-foreground">
                 <p className="flex justify-between">
                   <span className="text-muted">Monday - Friday</span>
-                  <span className="text-muted">9:00 AM - 6:00 PM</span>
+                  <span className="text-muted">10:00 AM - 6:00 PM</span>
                 </p>
                 <p className="flex justify-between">
                   <span className="text-muted">Saturday</span>
@@ -190,7 +258,7 @@ const Contact = () => {
                 </p>
                 <p className="flex justify-between">
                   <span className="text-muted">Sunday</span>
-                  <span className="text-muted">Closed</span>
+                  <span className="text-destructive">Closed</span>
                 </p>
               </div>
             </motion.div>
