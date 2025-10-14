@@ -1,13 +1,12 @@
 'use client';
 
-import { useState, useMemo, useEffect, Suspense } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Search,
   SlidersHorizontal,
   Grid,
   List,
-  Loader2Icon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -112,7 +111,7 @@ export default function ProductsPageClient() {
                 placeholder="Search products, brands..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 placeholder:text-muted"
+                className="pl-10 placeholder:text-muted text-muted"
               />
             </div>
 
