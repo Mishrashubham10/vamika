@@ -60,7 +60,14 @@ const Footer = () => {
               <li className="text-muted">FAQ</li>
               <li className="text-muted">Shipping</li>
               <li className="text-muted">Returns</li>
-              <li className="text-muted">Privacy Policy</li>
+              <li>
+                <Link
+                  href="/privacy"
+                  className="text-muted"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
             </ul>
           </div>
 

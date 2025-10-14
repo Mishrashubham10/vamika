@@ -37,7 +37,7 @@ export default function CartPage() {
 
   const handleCheckout = () => {
     setIsProcessing(true);
-    setOpen(true);
+    setOpen(true)
   };
 
   if (state.cart.length === 0) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { ShoppingCart, Menu, X, ShoppingBag } from 'lucide-react';
+import { Menu, X, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Button } from './ui/button';
@@ -14,6 +14,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { state, dispatch } = useVamika();
+  const isLoggedIn = state.isAuthenticated;
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -30,8 +31,10 @@ const Navbar = () => {
   );
 
   const handleLogout = () => {
-    dispatch({ type: 'LOGOUT' }),
-      toast.success("You've been logged out successfully!");
+    dispatch({ type: 'LOGOUT' });
+    toast("You've been logged out successfully!", {
+      description: "You've been logged out successfully!",
+    });
   };
 
   return (
@@ -75,6 +78,26 @@ const Navbar = () => {
                 )}
               </Button>
             </Link>
+            {isLoggedIn ? (
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-muted bg-gray-800 hover:bg-white/10"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Link href="/login">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-muted bg-gray-800 hover:bg-white/10"
+                >
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
