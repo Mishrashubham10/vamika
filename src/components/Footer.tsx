@@ -1,10 +1,10 @@
-import Link from "next/link";
+import Link from 'next/link';
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 const Footer = () => {
   const date: Date = new Date();
   const getFullYear: number = date.getFullYear();
-  
+
   return (
     <footer className="glass-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
@@ -17,7 +17,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-primary-foreground">Quick Links</h4>
+            <h4 className="font-semibold mb-4 text-primary-foreground">
+              Quick Links
+            </h4>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -54,16 +56,39 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div>
-            <h4 className="font-semibold mb-4 text-primary-foreground">Support</h4>
+          <div className='cursor-pointer'>
+            <h4 className="font-semibold mb-4 text-primary-foreground">
+              Support
+            </h4>
             <ul className="space-y-2">
-              <li className="text-muted">FAQ</li>
-              <li className="text-muted">Shipping</li>
-              <li className="text-muted">Returns</li>
+              <li>
+                <Link
+                  href="/faq"
+                  className="text-muted hover:text-primary transition-colors"
+                >
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/shipping"
+                  className="text-muted hover:text-primary transition-colors"
+                >
+                  Shipping
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/returns"
+                  className="text-muted hover:text-primary transition-colors"
+                >
+                  Returns
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/privacy"
-                  className="text-muted"
+                  className="text-muted hover:text-primary transition-colors"
                 >
                   Privacy Policy
                 </Link>
@@ -72,7 +97,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-primary-foreground">Follow Us</h4>
+            <h4 className="font-semibold mb-4 text-primary-foreground">
+              Follow Us
+            </h4>
             <div className="flex gap-4">
               <a
                 href="#"
