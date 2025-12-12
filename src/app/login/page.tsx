@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -58,7 +57,7 @@ export default function LoginPage() {
       className="bg-gray-800 rounded-2xl max-w-4xl mx-auto p-16 mb-8 mt-24 shadow-md hover:shadow-lg hover:glass-card"
     >
       <h2 className="text-2xl font-bold mb-6 text-primary-foreground">
-        Register with <span className="gradient-text">Vamika</span>
+        SignIn with <span className="gradient-text">Vamika</span>
       </h2>
       <form onSubmit={handleLogin} className="space-y-4 bg-transparent">
         {/* ============== EMAIL ================= */}
